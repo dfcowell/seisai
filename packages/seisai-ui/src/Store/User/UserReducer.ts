@@ -10,7 +10,7 @@ const defaultState: IUserState = {
 
 type UserActions = Action<ActionTypes> & { user?: IUserData };
 
-export const UserReducer = (
+export const userReducer = (
   state: IUserState = defaultState,
   action: UserActions
 ) => {
@@ -30,3 +30,4 @@ export const UserReducer = (
 };
 
 export const getUser = (state: IAppState) => state.user.data;
+export const isUserLoading = (state: IAppState) => state.user.loading;

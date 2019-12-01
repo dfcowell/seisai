@@ -21,16 +21,16 @@ const Container = styled.div`
 const StyledTextInput = styled.input`
   background: #2a2a2a;
   border: none;
-  border-bottom: 0.1em solid #444;
+  border-bottom: ${props => props.theme.forms.border.normal};
   box-sizing: border-box;
-  color: #bfbfbf;
+  color: ${props => props.theme.colors.text};
   display: block;
   outline: none;
   padding: 0.4em;
   width: 100%;
 
   &:focus {
-    border-bottom-color: #bfbfbf;
+    border-bottom: ${props => props.theme.forms.border.focused};
   }
 `;
 

@@ -3,10 +3,14 @@ import thunkMiddleware from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 import { IAppState } from "./IAppState";
-import { UserReducer } from "./User/UserReducer";
+import { userReducer } from "./User/UserReducer";
+import { modalReducer } from "./Modal/ModalReducer";
+import { collectionReducer } from "./Collections/CollectionReducer";
 
 const rootReducer = combineReducers({
-  user: UserReducer
+  collections: collectionReducer,
+  modal: modalReducer,
+  user: userReducer
 });
 
 export const configureStore = (state?: IAppState) => {

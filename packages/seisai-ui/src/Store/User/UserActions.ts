@@ -47,8 +47,6 @@ export const logIn: ActionCreator<ThunkAction<
 
   const user = await response.json();
 
-  console.log("user logged in", user);
-
   dispatch(loggedIn(user));
 
   return user as IUserData;

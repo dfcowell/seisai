@@ -5,12 +5,14 @@ import { IAppState } from "Store/IAppState";
 import { IUserData } from "Store/User/IUserData";
 import { PublicRoutes } from "Public";
 import { PrivateRoutes } from "Private";
+import { getUser, isUserLoading } from "Store/User/UserReducer";
 
-type RouteComponentProps = { user?: IUserData };
+type RouteComponentProps = { user?: IUserData; loading: boolean };
 
-const RouteComponent: FC<RouteComponentProps> = ({ user }) =>
-  user ? <PrivateRoutes /> : <PublicRoutes />;
+const RouteComponent: FC<RouteComponentProps> = ({ loading, user }) =>
+  loading ? null : user ? <PrivateRoutes /> : <PublicRoutes />;
 
 export const Routes = connect((state: IAppState) => ({
-  user: state.user.data
+  user: getUser(state),
+  loading: isUserLoading(state)
 }))(RouteComponent);
