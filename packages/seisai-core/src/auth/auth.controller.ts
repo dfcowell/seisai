@@ -1,5 +1,4 @@
 import { Controller, Post, Request, UseGuards, Get } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from 'src/users/users.service';
 import { LocalAuthGuard } from './local.authguard';
 import { RequireSessionGuard } from './require-session.guard';
