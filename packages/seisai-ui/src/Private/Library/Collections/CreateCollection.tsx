@@ -1,4 +1,4 @@
-import React, { FC, FormEvent } from "react";
+import React, { FormEvent } from "react";
 import { P } from "UI/Typography/P";
 import { TextInput } from "UI/Forms/TextInput";
 import { FormContainer } from "UI/Forms/FormContainer";
@@ -26,7 +26,7 @@ type CreateCollectionState = {
 class CreateCollectionComponent extends FormContainer<
   CreateCollectionProps,
   CreateCollectionState
-> {
+  > {
   constructor(props: CreateCollectionProps) {
     super(props);
 

@@ -7,11 +7,11 @@ export const PublicRoutes = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
+      <Route path={`${path}register`}>
+        <RegisterForm />
+      </Route>
       <Route path={path}>
         <ConnectedLoginForm />
-      </Route>
-      <Route path={`${path}/register`}>
-        <RegisterForm />
       </Route>
     </Switch>
   );

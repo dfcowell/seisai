@@ -6,9 +6,11 @@ import { IAppState } from "./IAppState";
 import { userReducer } from "./User/UserReducer";
 import { modalReducer } from "./Modal/ModalReducer";
 import { collectionReducer } from "./Collections/CollectionReducer";
+import { importReducer } from "./Import/ImportReducer";
 
 const rootReducer = combineReducers({
   collections: collectionReducer,
+  import: importReducer,
   modal: modalReducer,
   user: userReducer
 });

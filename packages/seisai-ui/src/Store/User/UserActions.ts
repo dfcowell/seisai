@@ -3,7 +3,7 @@ import { ThunkAction } from "redux-thunk";
 import { IAppState } from "Store/IAppState";
 import { IUserData } from "./IUserData";
 
-export enum ActionTypes {
+export enum UserActionType {
   LoggedIn = "seisai/user/LOGGED_IN",
   LoggedOut = "seisai/user/LOGGED_OUT"
 }
@@ -53,7 +53,7 @@ export const logIn: ActionCreator<ThunkAction<
 };
 
 export const loggedIn = (user: IUserData) => ({
-  type: ActionTypes.LoggedIn,
+  type: UserActionType.LoggedIn,
   user
 });
 
@@ -67,5 +67,5 @@ export const signOut: ActionCreator<ThunkAction<
 };
 
 export const loggedOut = () => ({
-  type: ActionTypes.LoggedOut
+  type: UserActionType.LoggedOut
 });
