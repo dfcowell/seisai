@@ -7,6 +7,8 @@ services:
       - "6379"
     networks:
       - backend
+    volumes:
+      - /data
 
   postgres:
     image: postgres:11.6-alpine
@@ -20,18 +22,20 @@ services:
   seisai:
     build: ./
     ports:
-      - 8080:8080
+      - 3001:3001
     networks:
       - backend
     depends_on:
       - redis
       - postgres
     environment:
+      PORT: 3001
       POSTGRES_HOST: postgres
       POSTGRES_PORT: '5432'
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DATABASE: postgres
+      REDIS_HOST: redis
     volumes:
       - ./:/app
     entrypoint: 
