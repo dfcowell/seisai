@@ -6,9 +6,12 @@ import {
   TreeParent,
   TreeChildren,
   TreeLevelColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { CollectionType } from './collection-type.enum';
 import { PrivacyLevel } from 'src/privacy-level.enum';
+import { Photo } from 'src/photos/photo.entity';
 
 @Entity()
 @Tree('closure-table')
@@ -40,4 +43,8 @@ export class Collection {
 
   @TreeParent()
   parent: Collection;
+
+  @ManyToMany(type => Photo)
+  @JoinTable()
+  photos: Photo[];
 }

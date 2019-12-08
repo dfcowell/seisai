@@ -6,8 +6,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { LocalStrategy } from './auth/local.strategy';
 import { CollectionsModule } from './collections/collections.module';
+import { PhotosModule } from './photos/photos.module';
+import { ImportsModule } from './imports/imports.module';
 
 @Module({
   imports: [
@@ -29,8 +30,10 @@ import { CollectionsModule } from './collections/collections.module';
       entities: ['dist/**/*.entity.{ts,js}'],
     }),
     CollectionsModule,
+    PhotosModule,
+    ImportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

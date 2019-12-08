@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Import } from 'src/imports/import.entity';
+import { Photo } from 'src/photos/photo.entity';
 
 @Entity()
 export class User {
@@ -19,4 +21,10 @@ export class User {
 
   @Column({ length: 95 })
   password: string;
+
+  @OneToMany(type => Import, i => i.user)
+  imports: Import[];
+
+  @OneToMany(type => Photo, photo => photo.user)
+  photos: Photo[];
 }
