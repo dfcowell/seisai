@@ -4,15 +4,24 @@ import { ImportsController } from './imports.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Import } from './import.entity';
 import { MulterModule } from '@nestjs/platform-express';
+import { PhotosModule } from 'src/photos/photos.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Import]),
     MulterModule.register({
-      dest: process.env.UPLOAD_PATH || '/tmp/uploads'
-    })
+      dest: process.env.UPLOAD_PATH || '/tmp/uploads',
+      fileFilter: (req, file, cb) => cb(null, /^image\//.test(file.mimetype)),
+      limits: {
+        files: 1,
+        fileSize: process.env.MAX_IMAGE_SIZE_BYTES
+          ? Number(process.env.MAX_IMAGE_SIZE_BYTES)
+          : 50 * 1000 * 1000,
+      },
+    }),
+    PhotosModule,
   ],
   providers: [ImportsService],
-  controllers: [ImportsController]
+  controllers: [ImportsController],
 })
-export class ImportsModule { }
+export class ImportsModule {}
