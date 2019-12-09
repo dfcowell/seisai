@@ -4,27 +4,25 @@ import { IImportFile } from "./IImportFile";
 export class ImportService {
   private client: AxiosInstance;
   private sessionId?: number;
-  private queue: Promise<void> = Promise.resolve();
+  private queue: Promise<void>;
 
   constructor() {
     this.client = axios.create();
 
-    this.startSession = this.startSession.bind(this);
+    this.queue = this.startSession();
   }
 
   public queueFileForImport(
     file: IImportFile,
     onUploadProgress?: (event: ProgressEvent) => void
   ) {
-    if (!this.sessionId) {
-      throw new Error(
-        'You must start an import session using "startSession" before enqueueing files'
-      );
-    }
-
     const { promise, resolve, reject } = this.createDeferred();
 
     const cb = async () => {
+      if (!this.sessionId) {
+        throw new Error("Session ID should be set");
+      }
+
       const data = new FormData();
       data.append("file", file.handle);
 
@@ -48,12 +46,6 @@ export class ImportService {
     return promise;
   }
 
-  public async startSession() {
-    const response = await this.client.post("/imports");
-
-    this.sessionId = response.data.sessionId;
-  }
-
   private createDeferred() {
     // Noop and awkward assignment here is due to
     // https://github.com/microsoft/TypeScript/issues/11498
@@ -68,5 +60,11 @@ export class ImportService {
     });
 
     return { promise, resolve, reject };
+  }
+
+  private async startSession() {
+    const response = await this.client.post("/imports");
+
+    this.sessionId = response.data.sessionId;
   }
 }
