@@ -5,7 +5,6 @@ import { IImportFile } from "./IImportFile";
 import { IAppState } from "Store/IAppState";
 
 const defaultState: IImportState = {
-  inProgress: false,
   files: []
 };
 
@@ -23,5 +22,7 @@ export const importReducer = (state = defaultState, action: ImportActions) => {
       return state;
   }
 };
+
+export const getImportService = (state: IAppState) => state.import.service;
 
 export const getImportFiles = (state: IAppState) => state.import.files;

@@ -1,6 +1,7 @@
 import { IImportFile } from "./IImportFile";
+import { ImportService } from "./ImportService";
 
 export interface IImportState {
-  inProgress: false;
+  service?: ImportService;
   files: IImportFile[];
 }
