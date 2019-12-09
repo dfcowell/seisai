@@ -20,7 +20,11 @@ export class ImportService {
 
     const cb = async () => {
       if (!this.sessionId) {
-        throw new Error("Session ID should be set");
+        // This should never happen, however we put it here
+        // to be on the safe side.
+        const error = new Error("Session ID should be set");
+        reject(error);
+        throw error;
       }
 
       const data = new FormData();
