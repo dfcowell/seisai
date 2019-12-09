@@ -12,7 +12,7 @@ import { User } from 'src/users/user.entity';
 import { Import } from 'src/imports/import.entity';
 import { Collection } from 'src/collections/collection.entity';
 
-@Entity()
+@Entity('photos')
 export class Photo {
   @PrimaryGeneratedColumn()
   id: number;

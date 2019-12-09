@@ -13,7 +13,7 @@ import { CollectionType } from './collection-type.enum';
 import { PrivacyLevel } from 'src/privacy-level.enum';
 import { Photo } from 'src/photos/photo.entity';
 
-@Entity()
+@Entity('collections')
 @Tree('closure-table')
 export class Collection {
   @PrimaryGeneratedColumn()

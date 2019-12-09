@@ -23,7 +23,7 @@ export class ImportsService {
 
   async incrementPhotoCount(sessionId: number) {
     const result = await this.importRepository.query(
-      'UPDATE imports SET photoCount = photoCount + 1 WHERE id = $1',
+      'UPDATE "imports" SET "photoCount" = "photoCount" + 1 WHERE "id" = $1',
       [sessionId],
     );
 

@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Import } from 'src/imports/import.entity';
 import { Photo } from 'src/photos/photo.entity';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,9 +22,15 @@ export class User {
   @Column({ length: 95 })
   password: string;
 
-  @OneToMany(type => Import, i => i.user)
+  @OneToMany(
+    type => Import,
+    i => i.user,
+  )
   imports: Import[];
 
-  @OneToMany(type => Photo, photo => photo.user)
+  @OneToMany(
+    type => Photo,
+    photo => photo.user,
+  )
   photos: Photo[];
 }

@@ -22,9 +22,9 @@ export class ImportsController {
 
   @Post()
   public async createImportSession(@Request() req) {
-    const sessionId = await this.importsService.createImportSession(req.user);
+    const { id } = await this.importsService.createImportSession(req.user);
 
-    return { sessionId };
+    return { sessionId: id };
   }
 
   @Post(':id/photos')

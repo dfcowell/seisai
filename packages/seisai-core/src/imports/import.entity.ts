@@ -1,8 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { User } from 'src/users/user.entity';
 import { Photo } from 'src/photos/photo.entity';
 
-@Entity()
+@Entity('imports')
 export class Import {
   @PrimaryGeneratedColumn()
   id: number;
@@ -10,12 +17,18 @@ export class Import {
   @CreateDateColumn()
   created: Date;
 
-  @ManyToOne(type => User, user => user.imports)
+  @ManyToOne(
+    type => User,
+    user => user.imports,
+  )
   user: User;
 
-  @OneToMany(type => Photo, photo => photo.import)
+  @OneToMany(
+    type => Photo,
+    photo => photo.import,
+  )
   photos: Photo[];
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: 'int', default: 0 })
   photoCount: number;
 }
