@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, MoreThan } from 'typeorm';
+import { createReadStream } from 'fs';
+
 import { Photo } from './photo.entity';
-import { Repository } from 'typeorm';
 import { User } from 'src/users/user.entity';
 
 @Injectable()
@@ -21,5 +23,30 @@ export class PhotosService {
     });
 
     return identifiers.pop();
+  }
+
+  getPhotoCount() {
+    return this.photoRepository.count();
+  }
+
+  getPhotosFromId(id: number, count: number) {
+    return this.photoRepository.find({
+      where: { id: MoreThan(id) },
+      take: count,
+    });
+  }
+
+  getPhotoById(id: number) {
+    return this.photoRepository.findOne(id);
+  }
+
+  async getPhotoStreamById(id: number) {
+    const photo = await this.getPhotoById(id);
+
+    if (!photo) {
+      throw new NotFoundException();
+    }
+
+    return createReadStream(photo.path);
   }
 }
