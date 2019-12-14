@@ -7,6 +7,7 @@ import { IAppState } from "Store/IAppState";
 import { isModalOpen, getModalContent } from "Store/Modal/ModalReducer";
 
 import { CollectionsPanel } from "./Collections/CollectionsPanel";
+import { PhotoGrid } from "./Photos/PhotoGrid";
 
 type LibraryViewProps = {
   ModalComponent?: ComponentType;
@@ -20,6 +21,7 @@ const LibraryViewComponent: FC<LibraryViewProps> = ({
   return (
     <>
       <CollectionsPanel />
+      <PhotoGrid />
       {showModal && ModalComponent && (
         <Backdrop>
           <Container>

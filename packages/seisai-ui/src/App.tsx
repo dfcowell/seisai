@@ -12,6 +12,7 @@ import { Routes } from "Routes";
 
 const theme = {
   colors: {
+    grey: "#454545",
     darkGrey: "#181818",
     darkerGrey: "#121212",
     black: "#101010",

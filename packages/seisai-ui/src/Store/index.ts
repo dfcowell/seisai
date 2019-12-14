@@ -7,11 +7,13 @@ import { userReducer } from "./User/UserReducer";
 import { modalReducer } from "./Modal/ModalReducer";
 import { collectionReducer } from "./Collections/CollectionReducer";
 import { importReducer } from "./Import/ImportReducer";
+import { photoReducer } from "./Photos/PhotoReducer";
 
 const rootReducer = combineReducers({
   collections: collectionReducer,
   import: importReducer,
   modal: modalReducer,
+  photos: photoReducer,
   user: userReducer
 });
 

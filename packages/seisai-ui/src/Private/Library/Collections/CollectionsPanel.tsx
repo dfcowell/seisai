@@ -41,7 +41,7 @@ const CollectionsPanelComponent: FC<LibraryViewProps> = ({
   }, [state.loadedCollections, loadCollections]);
 
   return (
-    <DrawerContainer width="20rem">
+    <DrawerContainer width="40rem">
       <DrawerHeader>Collections</DrawerHeader>
       <DrawerBody>
         <CollectionGroup></CollectionGroup>

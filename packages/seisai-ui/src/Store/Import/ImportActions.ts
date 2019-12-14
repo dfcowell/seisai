@@ -50,5 +50,6 @@ export const importFiles: ActionCreator<ThunkAction<
 };
 
 export const startImport = (service: ImportService) => ({
-  type: ImportActionType.StartImport
+  type: ImportActionType.StartImport,
+  service
 });

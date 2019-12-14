@@ -3,12 +3,16 @@ import { ImportActionType } from "./ImportActions";
 import { Action } from "redux";
 import { IImportFile } from "./IImportFile";
 import { IAppState } from "Store/IAppState";
+import { ImportService } from "./ImportService";
 
 const defaultState: IImportState = {
   files: []
 };
 
-type ImportActions = Action<ImportActionType> & { files?: IImportFile[] };
+type ImportActions = Action<ImportActionType> & {
+  files?: IImportFile[];
+  service?: ImportService;
+};
 
 export const importReducer = (state = defaultState, action: ImportActions) => {
   switch (action.type) {
@@ -16,6 +20,12 @@ export const importReducer = (state = defaultState, action: ImportActions) => {
       return {
         ...state,
         files: [...state.files, ...(action.files as IImportFile[])]
+      };
+
+    case ImportActionType.StartImport:
+      return {
+        ...state,
+        service: action.service as ImportService
       };
 
     default:
