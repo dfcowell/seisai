@@ -4,5 +4,6 @@ export interface IPhotoState {
   photos: {
     [key: number]: IPhoto;
   };
+  selected: number[];
   totalCount: number;
 }

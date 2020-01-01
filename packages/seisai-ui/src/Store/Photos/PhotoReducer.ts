@@ -7,11 +7,12 @@ import { IAppState } from "Store/IAppState";
 
 const defaultState: IPhotoState = {
   photos: {},
+  selected: [],
   totalCount: 0
 };
 
 type PhotoActions = Action<PhotoAction> & {
-  photos?: IPhoto[];
+  photos?: IPhoto[] | number[];
   count?: number;
 };
 
@@ -19,6 +20,7 @@ export const photoReducer = (state = defaultState, action: PhotoActions) => {
   switch (action.type) {
     case PhotoAction.Loaded:
       return {
+        ...state,
         photos: {
           ...state.photos,
           ...(action.photos as IPhoto[]).reduce(
@@ -27,6 +29,11 @@ export const photoReducer = (state = defaultState, action: PhotoActions) => {
           )
         },
         totalCount: action.count as number
+      };
+    case PhotoAction.SelectionUpdated:
+      return {
+        ...state,
+        selected: action.photos as number[]
       };
     default:
       return state;
@@ -37,3 +44,14 @@ export const getPhotos = (state: IAppState) =>
   Object.keys(state.photos.photos).map(k => state.photos.photos[Number(k)]);
 
 export const getPhotoCount = (state: IAppState) => state.photos.totalCount;
+
+export const getSelectedIds = (state: IAppState) => state.photos.selected;
+
+export const getSelectedMap = (state: IAppState): { [key: number]: boolean } =>
+  state.photos.selected.reduce(
+    (m, id) => ({
+      ...m,
+      [id]: true
+    }),
+    {}
+  );

@@ -5,6 +5,7 @@ export const GridItem = styled.button<{ width: number }>`
   background: transparent;
   box-sizing: border-box;
   display: block;
+  outline: none;
   padding: 1.5em;
   width: ${props => props.width}%;
 `;

@@ -7,7 +7,8 @@ import { IAppState } from "Store/IAppState";
 import { IPhoto } from "./IPhoto";
 
 export enum PhotoAction {
-  Loaded = "seisai/photos/LOADED"
+  Loaded = "seisai/photos/LOADED",
+  SelectionUpdated = "seisai/photos/SELECTION_UPDATED"
 }
 
 export const loadPhotos: ActionCreator<ThunkAction<
@@ -35,4 +36,9 @@ export const photosLoaded = (photos: IPhoto[], count: number) => ({
   type: PhotoAction.Loaded,
   photos,
   count
+});
+
+export const selectionUpdated = (photos: number[]) => ({
+  type: PhotoAction.SelectionUpdated,
+  photos
 });

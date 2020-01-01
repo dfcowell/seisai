@@ -1,23 +1,17 @@
-import React, { FC, ComponentType } from "react";
-import { connect } from "react-redux";
+import React, { FC } from "react";
+import { useSelector } from "react-redux";
 
 import { Backdrop } from "UI/Containers/Modal/Backdrop";
 import { Container } from "UI/Containers/Modal/Container";
-import { IAppState } from "Store/IAppState";
 import { isModalOpen, getModalContent } from "Store/Modal/ModalReducer";
 
 import { CollectionsPanel } from "./Collections/CollectionsPanel";
 import { PhotoGrid } from "./Photos/PhotoGrid";
 
-type LibraryViewProps = {
-  ModalComponent?: ComponentType;
-  showModal: boolean;
-};
+export const LibraryView: FC = () => {
+  const showModal = useSelector(isModalOpen);
+  const ModalComponent = useSelector(getModalContent);
 
-const LibraryViewComponent: FC<LibraryViewProps> = ({
-  ModalComponent,
-  showModal
-}) => {
   return (
     <>
       <CollectionsPanel />
@@ -32,10 +26,3 @@ const LibraryViewComponent: FC<LibraryViewProps> = ({
     </>
   );
 };
-
-export const LibraryView = connect(
-  (state: IAppState) => ({
-    showModal: isModalOpen(state),
-    ModalComponent: getModalContent(state),
-  })
-)(LibraryViewComponent);
