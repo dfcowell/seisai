@@ -34,12 +34,18 @@ export const createSelectionHandler = <
 ) => (event: MouseEvent<E>) => {
   const clickedId = parseId(event.currentTarget.id);
 
+  if (typeof clickedId !== typeof items[0].id) {
+    console.warn(
+      "Type mismatch in selection handler, are you missing a custom parseId function?"
+    );
+  }
+
   if (event.ctrlKey) {
     return updateSelection(toggleSelection(selection, selectionMap, clickedId));
   }
 
   if (event.shiftKey) {
-    return resizeSelection(items, selectionMap, clickedId);
+    return updateSelection(resizeSelection(items, selectionMap, clickedId));
   }
 
   updateSelection([clickedId]);
@@ -67,7 +73,7 @@ const resizeSelection = <T extends Selectable<I>, I extends string | number>(
       clickedIndex,
       firstSelectedIndex,
       lastSelectedIndex
-    );
+    ) as I[];
   }
 
   return shrinkSelection(
@@ -75,7 +81,7 @@ const resizeSelection = <T extends Selectable<I>, I extends string | number>(
     clickedIndex,
     firstSelectedIndex,
     lastSelectedIndex
-  );
+  ) as I[];
 };
 
 const growSelection = <T extends Selectable<I>, I extends string | number>(
@@ -83,10 +89,11 @@ const growSelection = <T extends Selectable<I>, I extends string | number>(
   clickedIndex: number,
   first: number,
   last: number
-) =>
-  items
+) => {
+  return items
     .slice(Math.min(clickedIndex, first), Math.max(clickedIndex, last) + 1)
     .map(item => item.id);
+};
 
 const shrinkSelection = <T extends Selectable<I>, I extends string | number>(
   items: T[],
@@ -99,8 +106,8 @@ const shrinkSelection = <T extends Selectable<I>, I extends string | number>(
   let deltaEnd = last - clickedIndex;
 
   if (deltaStart < deltaEnd) {
-    return items.slice(clickedIndex, last + 1).map(photo => photo.id);
+    return items.slice(clickedIndex, last + 1).map(item => item.id);
   }
 
-  return items.slice(first, clickedIndex + 1).map(photo => photo.id);
+  return items.slice(first, clickedIndex + 1).map(item => item.id);
 };

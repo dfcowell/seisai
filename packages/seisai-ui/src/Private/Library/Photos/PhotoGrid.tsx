@@ -36,8 +36,12 @@ export const PhotoGrid: FC<PhotoGridProps> = () => {
   const selectedPhotoIds = useSelector(getSelectedIds);
 
   const handleSelection: MouseEventHandler<HTMLImageElement> = useCallback(
-    createSelectionHandler(photos, selectedPhotoIds, selectedPhotoMap, ids =>
-      dispatch(selectionUpdated(ids))
+    createSelectionHandler(
+      photos,
+      selectedPhotoIds,
+      selectedPhotoMap,
+      ids => dispatch(selectionUpdated(ids)),
+      id => parseInt(id, 10)
     ),
     [dispatch, selectedPhotoIds, selectedPhotoMap, photos]
   );
