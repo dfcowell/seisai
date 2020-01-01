@@ -6,6 +6,7 @@ const ContainerComponent = styled.div`
   background: ${props => props.theme.colors.darkGrey};
   margin: ${props => props.theme.padding.wide};
   padding: ${props => props.theme.padding.wide};
+  box-shadow: 3px 5px 19px 0px rgba(0, 0, 0, 0.75);
 `;
 
 const preventBubble = (event: SyntheticEvent<HTMLDivElement>) => {

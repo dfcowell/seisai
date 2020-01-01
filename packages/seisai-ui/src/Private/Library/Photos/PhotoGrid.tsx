@@ -6,6 +6,7 @@ import React, {
   useCallback
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Hotkeys from "react-hot-keys";
 
 import { loadPhotos, selectionUpdated } from "Store/Photos/PhotoActions";
 import {
@@ -34,6 +35,9 @@ export const PhotoGrid: FC<PhotoGridProps> = () => {
   const [loadedPhotos, setLoadedPhotos] = useState(false);
   const selectedPhotoMap = useSelector(getSelectedMap);
   const selectedPhotoIds = useSelector(getSelectedIds);
+  const deselect = useCallback(() => dispatch(selectionUpdated([])), [
+    dispatch
+  ]);
 
   const handleSelection: MouseEventHandler<HTMLImageElement> = useCallback(
     createSelectionHandler(
@@ -73,6 +77,7 @@ export const PhotoGrid: FC<PhotoGridProps> = () => {
           </GridItem>
         ))}
       </GridContainer>
+      <Hotkeys keyName="esc" onKeyUp={deselect} />
     </DrawerContainer>
   );
 };
