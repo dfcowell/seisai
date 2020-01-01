@@ -58,7 +58,7 @@ export const PhotoGrid: FC<PhotoGridProps> = () => {
       <DrawerHeader>Library ({count} items)</DrawerHeader>
       <GridContainer>
         {photos.map(photo => (
-          <GridItem width={20} key={photo.id}>
+          <GridItem width="16em" key={photo.id}>
             <ThumbnailContainer>
               <SelectableThumbnail
                 id={photo.id.toString()}

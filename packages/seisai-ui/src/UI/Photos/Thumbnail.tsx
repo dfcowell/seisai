@@ -10,4 +10,5 @@ export const Thumbnail = styled.img<ThumbnailProps>`
   display: block;
   margin: 0 auto;
   max-width: 100%;
+  max-height: 100%;
 `;
