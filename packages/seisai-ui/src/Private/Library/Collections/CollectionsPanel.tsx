@@ -18,18 +18,22 @@ import { CollectionGroup } from "./CollectionGroup";
 import { CreateCollection } from "./CreateCollection";
 import { CollectionListItem } from "./CollectionListItem";
 import { ICollectionTree } from "Store/Collections/ICollectionTree";
+import { MosaicWindow, MosaicBranch } from "react-mosaic-component";
+import { LibraryTileId } from "../LibraryTileId";
 
 type LibraryViewProps = {
   openAddCollectionModal: () => void;
   loadCollections: () => void;
   userCollections: ICollectionTree[];
+  path: MosaicBranch[];
 };
 
 // TODO: This component is getting out of hand. Refactor it.
 const CollectionsPanelComponent: FC<LibraryViewProps> = ({
   openAddCollectionModal,
   loadCollections,
-  userCollections
+  userCollections,
+  path
 }) => {
   const [state, setState] = useState({ loadedCollections: false });
 
@@ -41,29 +45,26 @@ const CollectionsPanelComponent: FC<LibraryViewProps> = ({
   }, [state.loadedCollections, loadCollections]);
 
   return (
-    <DrawerContainer width="40rem">
-      <DrawerHeader>Collections</DrawerHeader>
-      <DrawerBody>
-        <CollectionGroup></CollectionGroup>
-        <CollectionGroup>
-          <H3>Date Captured</H3>
-        </CollectionGroup>
-        <CollectionGroup>
-          <H3>
-            <span>Custom Collections</span>
-            <PillButton onClick={openAddCollectionModal}>+ Add</PillButton>
-          </H3>
-          {userCollections.map(collection => (
-            <CollectionListItem
-              key={collection.id}
-              collection={collection}
-              collapse={() => { }}
-              onClick={() => { }}
-            />
-          ))}
-        </CollectionGroup>
-      </DrawerBody>
-    </DrawerContainer>
+    <MosaicWindow<LibraryTileId> path={path} title="Collections">
+      <CollectionGroup></CollectionGroup>
+      <CollectionGroup>
+        <H3>Date Captured</H3>
+      </CollectionGroup>
+      <CollectionGroup>
+        <H3>
+          <span>Custom Collections</span>
+          <PillButton onClick={openAddCollectionModal}>+ Add</PillButton>
+        </H3>
+        {userCollections.map(collection => (
+          <CollectionListItem
+            key={collection.id}
+            collection={collection}
+            collapse={() => {}}
+            onClick={() => {}}
+          />
+        ))}
+      </CollectionGroup>
+    </MosaicWindow>
   );
 };
 

@@ -55,3 +55,6 @@ export const getSelectedMap = (state: IAppState): { [key: number]: boolean } =>
     }),
     {}
   );
+
+export const getSelectedPhotos = (state: IAppState) =>
+  state.photos.selected.map(id => state.photos.photos[id]);
