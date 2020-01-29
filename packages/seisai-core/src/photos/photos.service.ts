@@ -14,15 +14,19 @@ export class PhotosService {
   ) {}
 
   async addPhoto(file: Express.Multer.File, user: User, importId?: number) {
-    const { identifiers } = await this.photoRepository.insert({
+    const data = {
       size: file.size,
       user: user,
       import: importId ? { id: importId } : undefined,
       originalFilename: file.originalname,
       path: file.path,
-    });
+    };
 
-    return identifiers.pop();
+    const { identifiers } = await this.photoRepository.insert(data);
+
+    const { id } = identifiers.pop();
+
+    return this.getPhotoById(id);
   }
 
   getPhotoCount() {

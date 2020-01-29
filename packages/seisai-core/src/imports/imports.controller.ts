@@ -35,12 +35,12 @@ export class ImportsController {
     @UploadedFile() file,
   ) {
     await this.importsService.incrementPhotoCount(sessionId);
-    const photoId = await this.photosService.addPhoto(
+    const { path, ...photo } = await this.photosService.addPhoto(
       file,
       req.user,
       sessionId,
     );
 
-    return { photoId };
+    return photo;
   }
 }

@@ -37,7 +37,12 @@ export class PhotosController {
   @Get(':id/image')
   @UseGuards(new RequireSessionGuard())
   //@Header('Content-Type', 'image/webp')
-  async getPhotoFile(@Param('id') id, @Query('size') size, @Response() res) {
+  async getPhotoFile(
+    @Param('id') id,
+    @Query('size') size,
+    @Query('crop') crop,
+    @Response() res,
+  ) {
     const stream = await this.photosService.getPhotoStreamById(id);
 
     const output: Stream = await new Promise((resolve, reject) => {
@@ -46,7 +51,7 @@ export class PhotosController {
       if (size) {
         const bounds = size.split(',').map(n => parseInt(n, 10));
         processor = processor.resize(bounds[0], bounds[1] || bounds[0], {
-          fit: 'inside',
+          fit: crop ? 'cover' : 'inside',
         });
       }
 
