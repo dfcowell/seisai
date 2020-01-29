@@ -12,6 +12,7 @@ const defaultState: IPhotoState = {
 };
 
 type PhotoActions = Action<PhotoAction> & {
+  photo?: IPhoto;
   photos?: IPhoto[] | number[];
   count?: number;
 };
@@ -29,6 +30,16 @@ export const photoReducer = (state = defaultState, action: PhotoActions) => {
           )
         },
         totalCount: action.count as number
+      };
+    case PhotoAction.Imported:
+      const p = action.photo as IPhoto;
+      return {
+        ...state,
+        photos: {
+          ...state.photos,
+          [p.id]: p
+        },
+        totalCount: state.totalCount + 1
       };
     case PhotoAction.SelectionUpdated:
       return {

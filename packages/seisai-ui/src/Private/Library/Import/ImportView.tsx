@@ -4,39 +4,52 @@ import { connect } from "react-redux";
 import { importFiles } from "Store/Import/ImportActions";
 import { ThunkDispatch } from "redux-thunk";
 import { IAppState } from "Store/IAppState";
+import { MosaicWindow, MosaicBranch } from "react-mosaic-component";
 import { AnyAction } from "redux";
+import styled from "styled-components";
+
 import { IImportFile } from "Store/Import/IImportFile";
 import { getImportFiles } from "Store/Import/ImportReducer";
+
 import { ImportThumbnail } from "./ImportThumbnail";
-import styled from "styled-components";
+import { Basic } from "UI/Containers/Basic";
 
 type ImportViewProps = {
   onDrop: (files: File[]) => void;
   files: IImportFile[];
+  path: MosaicBranch[];
 };
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
 `;
 
-const ImportViewComponent: FC<ImportViewProps> = ({ onDrop, files }) => {
+const ImportViewComponent: FC<ImportViewProps> = ({ onDrop, files, path }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: "image/*",
     onDrop
   });
+
   return (
-    <Container {...getRootProps()}>
-      <input {...getInputProps()} />
-      {files.length === 0 &&
-        (isDragActive ? (
-          <p>Drop photos here to import.</p>
-        ) : (
-          <p>Drag and drop photos here to import, or click to select files.</p>
-        ))}
-      {files.map(f => (
-        <ImportThumbnail file={f} key={f.handle.name} />
-      ))}
-    </Container>
+    <MosaicWindow path={path} title="Import">
+      <Container {...getRootProps()}>
+        <input {...getInputProps()} />
+        <Basic>
+          {files.length === 0 &&
+            (isDragActive ? (
+              <p>Drop photos here to import.</p>
+            ) : (
+              <p>
+                Drag and drop photos here to import, or click to select files.
+              </p>
+            ))}
+          {files.map(f => (
+            <ImportThumbnail file={f} key={f.handle.name} />
+          ))}
+        </Basic>
+      </Container>
+    </MosaicWindow>
   );
 };
 

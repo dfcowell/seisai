@@ -29,7 +29,12 @@ export const LibraryView: FC = () => {
           direction: "row",
           first: {
             direction: "row",
-            first: LibraryTileId.Collections,
+            first: {
+              direction: "column",
+              first: LibraryTileId.Collections,
+              second: LibraryTileId.Import,
+              splitPercentage: 75
+            },
             second: LibraryTileId.Library,
             splitPercentage: 20
           },

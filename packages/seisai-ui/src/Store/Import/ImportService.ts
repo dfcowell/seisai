@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { IImportFile } from "./IImportFile";
+import { IPhoto } from "Store/Photos/IPhoto";
 
 export class ImportService {
   private client: AxiosInstance;
@@ -16,7 +17,7 @@ export class ImportService {
     file: IImportFile,
     onUploadProgress?: (event: ProgressEvent) => void
   ) {
-    const { promise, resolve, reject } = this.createDeferred();
+    const { promise, resolve, reject } = this.createDeferred<IPhoto>();
 
     const cb = async () => {
       if (!this.sessionId) {
@@ -31,7 +32,7 @@ export class ImportService {
       data.append("file", file.handle);
 
       try {
-        const { photoId } = await this.client.post(
+        const res = await this.client.post<IPhoto>(
           `/imports/${this.sessionId}/photos`,
           data,
           {
@@ -39,7 +40,7 @@ export class ImportService {
           }
         );
 
-        resolve(photoId);
+        resolve(res.data);
       } catch (err) {
         reject(err);
       }
@@ -50,7 +51,11 @@ export class ImportService {
     return promise;
   }
 
-  private createDeferred() {
+  private createDeferred<T>(): {
+    promise: Promise<T>;
+    resolve: (result: T) => void;
+    reject: (err: Error) => void;
+  } {
     // Noop and awkward assignment here is due to
     // https://github.com/microsoft/TypeScript/issues/11498
     const noop = () => {};
@@ -58,7 +63,7 @@ export class ImportService {
     let resolve: (result?: any) => void = noop;
     let reject: (reason?: Error) => void = noop;
 
-    const promise = new Promise((res, rej) => {
+    const promise = new Promise<T>((res, rej) => {
       resolve = res;
       reject = rej;
     });

@@ -5,6 +5,7 @@ import { ImportFileStatus } from "./ImportFileStatus";
 import { getImportService } from "./ImportReducer";
 import { ImportService } from "./ImportService";
 import { IImportFile } from "./IImportFile";
+import { photoImported } from "Store/Photos/PhotoActions";
 
 export enum ImportActionType {
   EnqueueFiles = "seisai/import/ENQUEUE_FILES",
@@ -45,7 +46,9 @@ export const importFiles: ActionCreator<ThunkAction<
   // TODO: Add logic for handling upload progress and
   // updating state when file has been successfully uploaded
   importFiles.forEach(file =>
-    (service as ImportService).queueFileForImport(file)
+    (service as ImportService)
+      .queueFileForImport(file)
+      .then(photo => dispatch(photoImported(photo)))
   );
 };
 
