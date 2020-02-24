@@ -1,10 +1,9 @@
-version: "3.7"
+version: '3.7'
 services:
-
   redis:
     image: redis:alpine
     ports:
-      - "6379"
+      - '6379'
     networks:
       - backend
     volumes:
@@ -20,9 +19,10 @@ services:
       POSTGRES_PASSWORD: postgres
 
   seisai:
-    build: ./
+    build: ./packages/seisai-core
     ports:
       - 3001:3001
+      - 9229:9229
     networks:
       - backend
     depends_on:
@@ -37,9 +37,20 @@ services:
       POSTGRES_DATABASE: postgres
       REDIS_HOST: redis
     volumes:
-      - ./:/app
-    entrypoint: 
+      - ./packages/seisai-core/:/app
+    entrypoint:
       - /app/start.sh
+
+  seisai-ui:
+    build: ./packages/seisai-ui
+    volumes:
+      - ./packages/seisai-ui/:/app
+    command: ./start.sh
+    networks:
+      - frontend
+      - backend
+    ports:
+      - 3000:3000
 
   # result:
   #   image: dockersamples/examplevotingapp_result:before
@@ -56,7 +67,6 @@ services:
   #       delay: 10s
   #     restart_policy:
   #       condition: on-failure
-
   # worker:
   #   image: dockersamples/examplevotingapp_worker
   #   networks:
@@ -76,6 +86,7 @@ services:
 
 networks:
   backend:
+  frontend:
 
 volumes:
   db-data:

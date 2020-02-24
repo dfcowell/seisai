@@ -17,4 +17,4 @@ if [[ $? -ne 0 ]]; then
 fi
 
 su ${USER_NAME} -c "yarn"
-su ${USER_NAME} -c "yarn start:dev"
+su ${USER_NAME} -c "yarn start:debug"
