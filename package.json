@@ -1,0 +1,12 @@
+{
+  "name": "seisai",
+  "version": "1.0.0",
+  "description": "A NodeJS content library and web publishing platform",
+  "main": "index.js",
+  "author": "Dan Cowell <dan@dfcowell.net>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "lerna": "^3.20.2"
+  }
+}
