@@ -16,5 +16,9 @@ if [[ $? -ne 0 ]]; then
 	useradd --home-dir /app --uid ${USER_ID} --shell /bin/bash --no-create-home ${USER_NAME}
 fi
 
-su ${USER_NAME} -c "yarn"
-su ${USER_NAME} -c "yarn start:debug"
+lerna bootstrap
+
+cd "./packages/$1"
+
+yarn
+yarn start

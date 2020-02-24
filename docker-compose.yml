@@ -19,7 +19,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
   seisai:
-    build: ./packages/seisai-core
+    build: ./
     ports:
       - 3001:3001
       - 9229:9229
@@ -37,15 +37,14 @@ services:
       POSTGRES_DATABASE: postgres
       REDIS_HOST: redis
     volumes:
-      - ./packages/seisai-core/:/app
-    entrypoint:
-      - /app/start.sh
+      - ./:/app
+    command: /app/start.sh seisai-core
 
   seisai-ui:
-    build: ./packages/seisai-ui
+    build: ./
     volumes:
-      - ./packages/seisai-ui/:/app
-    command: ./start.sh
+      - ./:/app
+    command: ./start.sh seisai-ui
     networks:
       - frontend
       - backend
