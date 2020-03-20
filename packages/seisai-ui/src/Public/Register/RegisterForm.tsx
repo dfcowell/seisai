@@ -1,10 +1,16 @@
-import React, { FormEvent } from "react";
-import { Dialog } from "UI/Containers/Dialog";
-import { P } from "UI/Typography/P";
-import { Seisai } from "UI/Brand/Seisai";
-import { TextInput } from "UI/Forms/TextInput";
-import { Primary } from "UI/Forms/Buttons";
-import { FormContainer } from "UI/Forms/FormContainer";
+import React, { FormEvent } from 'react';
+import {
+  Card,
+  Elevation,
+  FormGroup,
+  InputGroup,
+  Button,
+  Intent,
+} from '@blueprintjs/core';
+
+import { P } from 'UI/Typography/P';
+import { Seisai } from 'UI/Brand/Seisai';
+import { FormContainer } from 'UI/Forms/FormContainer';
 
 type RegisterFormProps = {};
 
@@ -21,24 +27,24 @@ export class RegisterForm extends FormContainer<
   constructor(props: RegisterFormProps) {
     super(props);
 
-    this.state = { email: "", username: "", password: "" };
+    this.state = { email: '', username: '', password: '' };
   }
 
   protected async onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    await fetch("/auth/signup", {
-      method: "post",
+    await fetch('/auth/signup', {
+      method: 'post',
       body: JSON.stringify(this.state),
       headers: {
-        "Content-Type": "application/json"
-      }
+        'Content-Type': 'application/json',
+      },
     });
   }
 
   public render() {
     return (
-      <Dialog width="24em">
+      <Card elevation={Elevation.TWO}>
         <P align="center">
           <Seisai />
         </P>
@@ -48,28 +54,35 @@ export class RegisterForm extends FormContainer<
           and must not contain spaces.
         </P>
         <form onSubmit={this.onSubmit}>
-          <TextInput
-            name="email"
-            label="Email"
-            value={this.state.email}
-            onChange={this.handleInput}
-          />
-          <TextInput
-            name="username"
-            label="Username"
-            value={this.state.username}
-            onChange={this.handleInput}
-          />
-          <TextInput
-            name="password"
-            label="Password"
-            type="password"
-            value={this.state.password}
-            onChange={this.handleInput}
-          />
-          <Primary>Submit</Primary>
+          <FormGroup labelFor="email" label="Email">
+            <InputGroup
+              id="email"
+              name="email"
+              value={this.state.email}
+              onChange={this.handleInput}
+            />
+          </FormGroup>
+          <FormGroup labelFor="username" label="Username">
+            <InputGroup
+              id="username"
+              name="username"
+              value={this.state.username}
+              onChange={this.handleInput}
+            />
+          </FormGroup>
+          <FormGroup labelFor="password" label="Password">
+            <InputGroup
+              id="password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleInput}
+            />
+          </FormGroup>
+          <Button intent={Intent.PRIMARY} type="submit">
+            Submit
+          </Button>
         </form>
-      </Dialog>
+      </Card>
     );
   }
 }
