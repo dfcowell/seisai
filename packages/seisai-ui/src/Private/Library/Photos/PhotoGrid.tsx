@@ -3,41 +3,56 @@ import React, {
   useState,
   useEffect,
   MouseEventHandler,
-  useCallback
-} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Hotkeys from "react-hot-keys";
+  useCallback,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Hotkeys from 'react-hot-keys';
 
-import { loadPhotos, selectionUpdated } from "Store/Photos/PhotoActions";
+import { loadPhotos, selectionUpdated } from 'Store/Photos/PhotoActions';
 import {
   getPhotos,
   getPhotoCount,
   getSelectedMap,
-  getSelectedIds
-} from "Store/Photos/PhotoReducer";
-import { GridContainer } from "UI/Photos/GridContainer";
-import { GridItem } from "UI/Photos/GridItem";
-import { ThumbnailContainer } from "UI/Photos/ThumbnailContainer";
-import { Truncate } from "UI/Util/Truncate";
-import { SelectableThumbnail } from "UI/Photos/SelectableThumbnail";
-import { createSelectionHandler } from "UI/Util/Selection";
-import { MosaicBranch, MosaicWindow } from "react-mosaic-component";
-import { LibraryTileId } from "../LibraryTileId";
+  getSelectedIds,
+} from 'Store/Photos/PhotoReducer';
+import { GridContainer } from 'UI/Photos/GridContainer';
+import { GridItem } from 'UI/Photos/GridItem';
+import { ThumbnailContainer } from 'UI/Photos/ThumbnailContainer';
+import { Truncate } from 'UI/Util/Truncate';
+import { SelectableThumbnail } from 'UI/Photos/SelectableThumbnail';
+import { createSelectionHandler } from 'UI/Util/Selection';
+import { MosaicBranch, MosaicWindow } from 'react-mosaic-component';
+import { LibraryTileId } from '../LibraryTileId';
+import {
+  getSelectedCollection,
+  getLibraryPhotos,
+} from 'Store/Library/LibraryReducer';
+import { ICollection } from 'Store/Collections/ICollection';
+import { initLibrary } from 'Store/Library/LibraryActions';
 
 type PhotoGridProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   path: MosaicBranch[];
 };
 
+const getTitle = (collection: ICollection | null) => {
+  const base = 'Library';
+  if (!collection) {
+    return base;
+  }
+
+  return `${base} > ${collection.name}`;
+};
+
 export const PhotoGrid: FC<PhotoGridProps> = ({ path }) => {
-  const [loadedPhotos, setLoadedPhotos] = useState(false);
+  const [initialized, doneInitialize] = useState(false);
   const dispatch = useDispatch();
-  const photos = useSelector(getPhotos);
-  const count = useSelector(getPhotoCount);
+  const photos = useSelector(getLibraryPhotos);
+  const collection = useSelector(getSelectedCollection);
   const selectedPhotoMap = useSelector(getSelectedMap);
   const selectedPhotoIds = useSelector(getSelectedIds);
   const deselectAll = useCallback(() => dispatch(selectionUpdated([])), [
-    dispatch
+    dispatch,
   ]);
 
   const handleSelection: MouseEventHandler<HTMLImageElement> = useCallback(
@@ -46,20 +61,21 @@ export const PhotoGrid: FC<PhotoGridProps> = ({ path }) => {
       selectedPhotoIds,
       selectedPhotoMap,
       ids => dispatch(selectionUpdated(ids)),
-      id => parseInt(id, 10)
+      id => parseInt(id, 10),
     ),
-    [dispatch, selectedPhotoIds, selectedPhotoMap, photos]
+    [dispatch, selectedPhotoIds, selectedPhotoMap, photos],
   );
 
   useEffect(() => {
-    if (!loadedPhotos) {
-      setLoadedPhotos(true);
-      dispatch(loadPhotos());
+    if (!initialized) {
+      doneInitialize(true);
+      dispatch(initLibrary());
     }
-  }, [loadedPhotos, dispatch]);
+  }, [doneInitialize, dispatch]);
 
   return (
-    <MosaicWindow<LibraryTileId> path={path} title="Library">
+    <MosaicWindow<LibraryTileId> path={path} title={getTitle(collection)}>
+      {collection && <div>{collection.description}</div>}
       <GridContainer>
         {photos.map(photo => (
           <GridItem width="16em" key={photo.id}>

@@ -16,7 +16,7 @@ export class PhotosService {
   async addPhoto(file: Express.Multer.File, user: User, importId?: number) {
     const data = {
       size: file.size,
-      user: user,
+      user,
       import: importId ? { id: importId } : undefined,
       originalFilename: file.originalname,
       path: file.path,
@@ -33,11 +33,21 @@ export class PhotosService {
     return this.photoRepository.count();
   }
 
-  getPhotosFromId(id: number, count: number) {
-    return this.photoRepository.find({
-      where: { id: MoreThan(id) },
-      take: count,
-    });
+  getPhotosFromId(id: number, count: number, collectionId?: number) {
+    const where = { id: MoreThan(id) };
+    if (!collectionId) {
+      return this.photoRepository.find({
+        where,
+        take: count,
+      });
+    }
+
+    return this.photoRepository
+      .createQueryBuilder()
+      .leftJoin('Photo.collections', 'collection')
+      .where(where)
+      .andWhere('collection.id = :collectionId', { collectionId })
+      .getMany();
   }
 
   getPhotoById(id: number) {

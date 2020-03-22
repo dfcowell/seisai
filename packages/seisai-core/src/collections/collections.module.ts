@@ -6,6 +6,7 @@ import { Collection } from './collection.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Collection])],
+  exports: [CollectionsService],
   providers: [CollectionsService],
   controllers: [CollectionsController],
 })

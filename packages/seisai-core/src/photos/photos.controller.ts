@@ -19,12 +19,20 @@ export class PhotosController {
 
   @Get()
   @UseGuards(new RequireSessionGuard())
-  async allPhotos(@Param('from') fromId, @Param('count') selectCount) {
+  async allPhotos(
+    @Query('from') fromId,
+    @Query('count') selectCount,
+    @Query('collection') collectionId,
+  ) {
     const id = fromId || 0;
     const boundedCount = Math.min(100, selectCount || 100);
 
     const count = await this.photosService.getPhotoCount();
-    const photos = await this.photosService.getPhotosFromId(id, boundedCount);
+    const photos = await this.photosService.getPhotosFromId(
+      id,
+      boundedCount,
+      collectionId,
+    );
 
     return { count, photos: photos.map(({ path, ...rest }) => rest) };
   }
@@ -36,7 +44,7 @@ export class PhotosController {
    */
   @Get(':id/image')
   @UseGuards(new RequireSessionGuard())
-  //@Header('Content-Type', 'image/webp')
+  // @Header('Content-Type', 'image/webp')
   async getPhotoFile(
     @Param('id') id,
     @Query('size') size,

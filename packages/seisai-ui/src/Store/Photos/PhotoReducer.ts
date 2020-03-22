@@ -1,14 +1,14 @@
-import { Action } from "redux";
+import { Action } from 'redux';
 
-import { IPhotoState } from "./IPhotoState";
-import { PhotoAction } from "./PhotoActions";
-import { IPhoto } from "./IPhoto";
-import { IAppState } from "Store/IAppState";
+import { IPhotoState } from './IPhotoState';
+import { PhotoAction } from './PhotoActions';
+import { IPhoto } from './IPhoto';
+import { IAppState } from 'Store/IAppState';
 
 const defaultState: IPhotoState = {
   photos: {},
   selected: [],
-  totalCount: 0
+  totalCount: 0,
 };
 
 type PhotoActions = Action<PhotoAction> & {
@@ -26,10 +26,10 @@ export const photoReducer = (state = defaultState, action: PhotoActions) => {
           ...state.photos,
           ...(action.photos as IPhoto[]).reduce(
             (p, photo) => ({ ...p, [photo.id]: photo }),
-            {}
-          )
+            {},
+          ),
         },
-        totalCount: action.count as number
+        totalCount: action.count as number,
       };
     case PhotoAction.Imported:
       const p = action.photo as IPhoto;
@@ -37,22 +37,22 @@ export const photoReducer = (state = defaultState, action: PhotoActions) => {
         ...state,
         photos: {
           ...state.photos,
-          [p.id]: p
+          [p.id]: p,
         },
-        totalCount: state.totalCount + 1
+        totalCount: state.totalCount + 1,
       };
     case PhotoAction.SelectionUpdated:
       return {
         ...state,
-        selected: action.photos as number[]
+        selected: action.photos as number[],
       };
     default:
       return state;
   }
 };
 
-export const getPhotos = (state: IAppState) =>
-  Object.keys(state.photos.photos).map(k => state.photos.photos[Number(k)]);
+export const getPhotos = (state: IAppState, ids: number[]) =>
+  ids.map(id => state.photos.photos[id]);
 
 export const getPhotoCount = (state: IAppState) => state.photos.totalCount;
 
@@ -62,9 +62,9 @@ export const getSelectedMap = (state: IAppState): { [key: number]: boolean } =>
   state.photos.selected.reduce(
     (m, id) => ({
       ...m,
-      [id]: true
+      [id]: true,
     }),
-    {}
+    {},
   );
 
 export const getSelectedPhotos = (state: IAppState) =>

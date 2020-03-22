@@ -1,15 +1,15 @@
-import axios from "axios";
-import { Action, ActionCreator } from "redux";
-import { ThunkAction } from "redux-thunk";
+import axios from 'axios';
+import { Action, ActionCreator } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
-import { IAppState } from "Store/IAppState";
+import { IAppState } from 'Store/IAppState';
 
-import { IPhoto } from "./IPhoto";
+import { IPhoto } from './IPhoto';
 
 export enum PhotoAction {
-  Imported = "seisai/photos/IMPORTED",
-  Loaded = "seisai/photos/LOADED",
-  SelectionUpdated = "seisai/photos/SELECTION_UPDATED"
+  Imported = 'seisai/photos/IMPORTED',
+  Loaded = 'seisai/photos/LOADED',
+  SelectionUpdated = 'seisai/photos/SELECTION_UPDATED',
 }
 
 export const loadPhotos: ActionCreator<ThunkAction<
@@ -17,15 +17,15 @@ export const loadPhotos: ActionCreator<ThunkAction<
   IAppState,
   null,
   Action
->> = (fromId: number = 0) => async dispatch => {
-  const response = await axios.get("/photos", { params: { from: fromId } });
+>> = (params: { [key: string]: string | number } = {}) => async dispatch => {
+  const response = await axios.get('/photos', { params });
 
   const { count, photos } = response.data;
 
   const photoData: IPhoto[] = photos.map((data: any) => ({
     ...data,
     created: new Date(data.created),
-    updated: new Date(data.updated)
+    updated: new Date(data.updated),
   }));
 
   dispatch(photosLoaded(photoData, count));
@@ -36,15 +36,15 @@ export const loadPhotos: ActionCreator<ThunkAction<
 export const photosLoaded = (photos: IPhoto[], count: number) => ({
   type: PhotoAction.Loaded,
   photos,
-  count
+  count,
 });
 
 export const photoImported = (photo: IPhoto) => ({
   type: PhotoAction.Imported,
-  photo
+  photo,
 });
 
 export const selectionUpdated = (photos: number[]) => ({
   type: PhotoAction.SelectionUpdated,
-  photos
+  photos,
 });

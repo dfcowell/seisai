@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Import } from './import.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import { PhotosModule } from 'src/photos/photos.module';
+import { CollectionsModule } from 'src/collections/collections.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PhotosModule } from 'src/photos/photos.module';
           : 50 * 1000 * 1000,
       },
     }),
+    CollectionsModule,
     PhotosModule,
   ],
   providers: [ImportsService],

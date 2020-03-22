@@ -1,32 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Import } from './import.entity';
-import { Repository, getRepository } from 'typeorm';
 import { User } from 'src/users/user.entity';
+import { CollectionsService } from 'src/collections/collections.service';
+import moment = require('moment');
+import { PhotosService } from 'src/photos/photos.service';
+import { CollectionType } from 'src/collections/collection-type.enum';
 
 @Injectable()
 export class ImportsService {
   constructor(
-    @InjectRepository(Import)
-    private readonly importRepository: Repository<Import>,
+    private readonly collectionsService: CollectionsService,
+    private readonly photosService: PhotosService,
   ) {}
 
   async createImportSession(user: User) {
-    // We don't need to supply anything else here because the
-    // ID and date on the import are generated in the DB.
-    const result = await this.importRepository.insert({
-      user,
+    const now = moment();
+
+    const result = await this.collectionsService.createCollection({
+      name: now.format(`YYYY-MM-DD h:mm A`),
+      slug: now.format(`import-YYYY-MM-DD-h-mm-a`),
+      description: `Import session started by ${
+        user.displayName
+      } at ${now.format('dddd, MMMM Do YYYY, h:mm:ss A')}`,
+      type: CollectionType.Import,
     });
 
-    return result.identifiers.pop();
+    return result.id;
   }
 
-  async incrementPhotoCount(sessionId: number) {
-    const result = await this.importRepository.query(
-      'UPDATE "imports" SET "photoCount" = "photoCount" + 1 WHERE "id" = $1',
-      [sessionId],
-    );
+  async importPhoto(user: User, sessionId: number, file: Express.Multer.File) {
+    const photo = await this.photosService.addPhoto(file, user);
 
-    console.log(result);
+    await this.collectionsService.link(sessionId, photo.id);
+
+    return photo;
   }
 }

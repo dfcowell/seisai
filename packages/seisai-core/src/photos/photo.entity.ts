@@ -36,8 +36,10 @@ export class Photo {
   )
   import?: Import;
 
-  @ManyToMany(type => Collection)
-  @JoinTable()
+  @ManyToMany(
+    type => Collection,
+    collection => collection.photos,
+  )
   collections: Collection[];
 
   @Column({ type: 'varchar', length: '200', default: '' })

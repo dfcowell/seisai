@@ -8,6 +8,7 @@ import {
   TreeLevelColumn,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
 } from 'typeorm';
 import { CollectionType } from './collection-type.enum';
 import { PrivacyLevel } from 'src/privacy-level.enum';
@@ -35,6 +36,7 @@ export class Collection {
 
   @Column({
     enum: [PrivacyLevel.Private, PrivacyLevel.Public, PrivacyLevel.Unlisted],
+    default: PrivacyLevel.Private,
   })
   privacy: PrivacyLevel;
 
@@ -44,7 +46,13 @@ export class Collection {
   @TreeParent()
   parent: Collection;
 
-  @ManyToMany(type => Photo)
+  @ManyToMany(
+    type => Photo,
+    photo => photo.collections,
+  )
   @JoinTable()
   photos: Photo[];
+
+  @CreateDateColumn()
+  created: Date;
 }

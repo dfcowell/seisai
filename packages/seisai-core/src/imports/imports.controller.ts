@@ -15,16 +15,13 @@ import { PhotosService } from 'src/photos/photos.service';
 @Controller('imports')
 @UseGuards(new RequireSessionGuard())
 export class ImportsController {
-  constructor(
-    private readonly importsService: ImportsService,
-    private readonly photosService: PhotosService,
-  ) {}
+  constructor(private readonly importsService: ImportsService) {}
 
   @Post()
   public async createImportSession(@Request() req) {
-    const { id } = await this.importsService.createImportSession(req.user);
+    const sessionId = await this.importsService.createImportSession(req.user);
 
-    return { sessionId: id };
+    return { sessionId };
   }
 
   @Post(':id/photos')
@@ -34,11 +31,10 @@ export class ImportsController {
     @Param('id') sessionId,
     @UploadedFile() file,
   ) {
-    await this.importsService.incrementPhotoCount(sessionId);
-    const { path, ...photo } = await this.photosService.addPhoto(
-      file,
+    const photo = await this.importsService.importPhoto(
       req.user,
       sessionId,
+      file,
     );
 
     return photo;

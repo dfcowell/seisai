@@ -1,11 +1,14 @@
-import { ICollection } from "./ICollection";
-import { IAppState } from "Store/IAppState";
-import { Action, ActionCreator } from "redux";
-import { ThunkAction } from "redux-thunk";
+import { ICollection } from './ICollection';
+import { IAppState } from 'Store/IAppState';
+import { Action, ActionCreator } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { IShortcut } from './IShortcut';
+import Axios from 'axios';
 
 export enum ActionTypes {
-  Created = "seisai/collections/CREATED",
-  Loaded = "seisai/collections/LOADED"
+  Created = 'seisai/collections/CREATED',
+  Loaded = 'seisai/collections/LOADED',
+  ShortcutsLoaded = 'seisai/collections/SHORTCUTS_LOADED',
 }
 
 export const createCollection: ActionCreator<ThunkAction<
@@ -14,12 +17,12 @@ export const createCollection: ActionCreator<ThunkAction<
   null,
   Action
 >> = (data: Partial<ICollection>) => async dispatch => {
-  const response = await fetch("/collections", {
-    method: "post",
+  const response = await fetch('/collections', {
+    method: 'post',
     body: JSON.stringify(data),
     headers: {
-      "Content-Type": "application/json"
-    }
+      'Content-Type': 'application/json',
+    },
   });
 
   const collection = await response.json();
@@ -31,8 +34,21 @@ export const createCollection: ActionCreator<ThunkAction<
 
 export const collectionCreated = (collection: ICollection) => ({
   type: ActionTypes.Created,
-  collection
+  collection,
 });
+
+export const loadShortcuts: ActionCreator<ThunkAction<
+  Promise<IShortcut[]>,
+  IAppState,
+  null,
+  Action
+>> = () => async dispatch => {
+  const response = await Axios.get<IShortcut[]>('/collections/shortcuts');
+
+  dispatch(shortcutsLoaded(response.data));
+
+  return response.data;
+};
 
 export const loadCollections: ActionCreator<ThunkAction<
   Promise<ICollection[]>,
@@ -40,21 +56,19 @@ export const loadCollections: ActionCreator<ThunkAction<
   null,
   Action
 >> = () => async dispatch => {
-  const response = await fetch("/collections", {
-    method: "get",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
+  const response = await Axios.get<ICollection[]>('/collections');
 
-  const collections = await response.json();
+  dispatch(collectionsLoaded(response.data));
 
-  dispatch(collectionsLoaded(collections));
-
-  return collections as ICollection[];
+  return response.data;
 };
 
 export const collectionsLoaded = (collections: ICollection[]) => ({
   type: ActionTypes.Loaded,
-  collections
+  collections,
+});
+
+export const shortcutsLoaded = (shortcuts: IShortcut[]) => ({
+  type: ActionTypes.ShortcutsLoaded,
+  shortcuts,
 });
