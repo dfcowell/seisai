@@ -22,6 +22,7 @@ import { CollectionListItem } from './CollectionListItem';
 import { MosaicWindow, MosaicBranch } from 'react-mosaic-component';
 import { LibraryTileId } from '../LibraryTileId';
 import { selectCollection, initLibrary } from 'Store/Library/LibraryActions';
+import { Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 
 type LibraryViewProps = {
   path: MosaicBranch[];
@@ -46,59 +47,42 @@ export const CollectionsPanel: FC<LibraryViewProps> = ({ path }) => {
 
   return (
     <MosaicWindow<LibraryTileId> path={path} title="Collections">
-      <CollectionGroup>
-        <ul>
-          <li>
-            <button
-              onClick={() => {
-                dispatch(initLibrary());
-                dispatch(selectCollection());
-              }}
-              key="all"
-            >
-              All Photos
-            </button>
-          </li>
-          {shortcuts.map(shortcut => (
-            <li key={shortcut.id}>
-              <button onClick={() => dispatch(selectCollection(shortcut.id))}>
-                {shortcut.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </CollectionGroup>
-      <CollectionGroup>
-        <H3>Date Captured</H3>
-      </CollectionGroup>
-      <CollectionGroup>
-        <H3>
-          <span>Custom Collections</span>
-          <PillButton onClick={() => dispatch(openModal(CreateCollection))}>
-            + Add
-          </PillButton>
-        </H3>
-        {userCollections.map(collection => (
-          <CollectionListItem
-            key={collection.id}
-            collection={collection}
-            collapse={() => {}}
-            onClick={() => {}}
+      <Menu>
+        <MenuItem
+          icon="grid-view"
+          text="All Photos"
+          onClick={() => {
+            dispatch(initLibrary());
+            dispatch(selectCollection());
+          }}
+          key="all"
+        />
+        {shortcuts.map((shortcut) => (
+          <MenuItem
+            text={shortcut.name}
+            onClick={() => dispatch(selectCollection(shortcut.id))}
           />
         ))}
-      </CollectionGroup>
-      <CollectionGroup>
-        <H3>Import Sessions</H3>
-        <ul>
-          {importCollections.map(collection => (
-            <li key={collection.id}>
-              <button onClick={() => dispatch(selectCollection(collection.id))}>
-                {collection.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </CollectionGroup>
+        <MenuDivider title="Date Captured" />
+        <MenuDivider title="Custom Collections" />
+        <PillButton onClick={() => dispatch(openModal(CreateCollection))}>
+          + Add
+        </PillButton>
+        {userCollections.map((collection) => (
+          <MenuItem
+            text={collection.name}
+            onClick={() => dispatch(selectCollection(collection.id))}
+          />
+        ))}
+        <MenuDivider title="Import Sessions" />
+        {importCollections.map((collection) => (
+          <MenuItem
+            icon="cloud-upload"
+            text={collection.name}
+            onClick={() => dispatch(selectCollection(collection.id))}
+          />
+        ))}
+      </Menu>
     </MosaicWindow>
   );
 };

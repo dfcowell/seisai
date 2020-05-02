@@ -3,7 +3,7 @@ export interface ICollection {
   name: string;
   slug: string;
   description: string;
-  type: "date" | "user" | "system";
+  type: 'date' | 'user' | 'system' | 'import';
   parent?: number;
   children?: number[];
 }

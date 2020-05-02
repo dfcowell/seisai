@@ -21,4 +21,4 @@ lerna bootstrap
 cd "./packages/$1"
 
 yarn
-yarn start
+yarn start:dev

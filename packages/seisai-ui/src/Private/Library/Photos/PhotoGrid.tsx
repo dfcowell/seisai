@@ -8,13 +8,8 @@ import React, {
 import { useDispatch, useSelector } from 'react-redux';
 import Hotkeys from 'react-hot-keys';
 
-import { loadPhotos, selectionUpdated } from 'Store/Photos/PhotoActions';
-import {
-  getPhotos,
-  getPhotoCount,
-  getSelectedMap,
-  getSelectedIds,
-} from 'Store/Photos/PhotoReducer';
+import { selectionUpdated } from 'Store/Photos/PhotoActions';
+import { getSelectedMap, getSelectedIds } from 'Store/Photos/PhotoReducer';
 import { GridContainer } from 'UI/Photos/GridContainer';
 import { GridItem } from 'UI/Photos/GridItem';
 import { ThumbnailContainer } from 'UI/Photos/ThumbnailContainer';
@@ -29,6 +24,7 @@ import {
 } from 'Store/Library/LibraryReducer';
 import { ICollection } from 'Store/Collections/ICollection';
 import { initLibrary } from 'Store/Library/LibraryActions';
+import { CollectionHeader } from './CollectionHeader';
 
 type PhotoGridProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -60,8 +56,8 @@ export const PhotoGrid: FC<PhotoGridProps> = ({ path }) => {
       photos,
       selectedPhotoIds,
       selectedPhotoMap,
-      ids => dispatch(selectionUpdated(ids)),
-      id => parseInt(id, 10),
+      (ids) => dispatch(selectionUpdated(ids)),
+      (id) => parseInt(id, 10),
     ),
     [dispatch, selectedPhotoIds, selectedPhotoMap, photos],
   );
@@ -75,9 +71,9 @@ export const PhotoGrid: FC<PhotoGridProps> = ({ path }) => {
 
   return (
     <MosaicWindow<LibraryTileId> path={path} title={getTitle(collection)}>
-      {collection && <div>{collection.description}</div>}
+      {collection && <CollectionHeader collection={collection} />}
       <GridContainer>
-        {photos.map(photo => (
+        {photos.map((photo) => (
           <GridItem width="16em" key={photo.id}>
             <ThumbnailContainer>
               <SelectableThumbnail

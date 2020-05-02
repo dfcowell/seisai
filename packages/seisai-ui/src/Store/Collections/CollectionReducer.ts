@@ -71,7 +71,7 @@ export const getCollection = (state: IAppState, id: number) =>
   state.collections.collections[id];
 
 export const getCollections = (state: IAppState, ids: number[]) =>
-  ids.map(id => getCollection(state, id));
+  ids.map((id) => getCollection(state, id));
 
 export const getShortcuts = (state: IAppState) => state.collections.shortcuts;
 
