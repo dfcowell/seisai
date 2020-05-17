@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
-import { BrowserRouter } from 'react-router-dom';
-import { configureStore } from 'Store';
-import { Provider } from 'react-redux';
-import { checkAuth } from 'Store/User/UserActions';
-import { ThunkDispatch } from 'redux-thunk';
-import { IAppState } from 'Store/IAppState';
-import { AnyAction } from 'redux';
 import { Routes } from 'Routes';
+import { configureStore } from 'Seisai/Store';
+import { checkAuth } from 'Seisai/Store/User/UserActions';
+import { IAppState } from 'Seisai/Store/IAppState';
 
 const theme = {
   colors: {

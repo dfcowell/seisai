@@ -1,12 +1,4 @@
 #! /bin/ash
-
-set -e
-
-until test -f "/bootstrap/bootstrap"; do
-  >&2 echo "Waiting for bootstrap - sleeping"
-  sleep 3
-done
-
 USER_NAME="node"
 
 DIR="/app"
@@ -21,6 +13,14 @@ if [[ $? -ne 0 ]]; then
 	useradd --home-dir /app --uid ${USER_ID} --shell /bin/bash --no-create-home ${USER_NAME}
 fi
 
-cd "./packages/$1"
+if test ! -f "/bootstrap/bootstrap"; then
+  lerna bootstrap
 
-yarn start:dev
+  # This provides an init-contianer-like experience on docker-compose, which
+  # doesn't natively support init containers.
+  today=$(date +"%Y-%m-%d")
+
+  echo "${today}" > /bootstrap/bootstrap
+fi
+
+sleep infinity

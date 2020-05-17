@@ -20,6 +20,13 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
 
+  bootstrap:
+    build: ./
+    volumes:
+      - ./:/app
+      - bootstrap:/bootstrap
+    command: ./bootstrap.sh
+
   seisai:
     build: ./
     ports:
@@ -40,12 +47,14 @@ services:
       REDIS_HOST: redis
     volumes:
       - ./:/app
+      - bootstrap:/bootstrap
     command: /app/start.sh seisai-core
 
   seisai-ui:
     build: ./
     volumes:
       - ./:/app
+      - bootstrap:/bootstrap
     command: ./start.sh seisai-ui
     networks:
       - frontend
@@ -91,3 +100,4 @@ networks:
 
 volumes:
   db-data:
+  bootstrap:
