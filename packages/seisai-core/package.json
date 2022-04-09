@@ -29,7 +29,7 @@
     "connect-redis": "^4.0.3",
     "cookie-parser": "^1.4.4",
     "express-session": "^1.17.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.14.0",
